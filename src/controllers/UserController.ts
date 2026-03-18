@@ -1,6 +1,8 @@
 import {Request, Response} from "express";
 import { UserService } from "../service/UserService.js";
 import { UserRepository } from "../repository/UserRepository.js";
+import { AppError } from "../errors/AppError.js";
+import { messageResponse } from "../enum/messageResponse.js";
 
 
 const createUser = async (req: Request, res: Response) => {
@@ -14,7 +16,11 @@ const createUser = async (req: Request, res: Response) => {
     });
     res.status(201).json(userCreated)
   } catch (error) {
-    res.status(500).json(JSON.stringify({error}))
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: messageResponse.INTERNAL_ERROR })
   }
 
 }
@@ -29,7 +35,11 @@ const login = async (req: Request, res: Response) => {
     });
     res.status(200).json(login)
   } catch (error) {
-    res.status(500).json(JSON.stringify({error}))
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ auth: false, message: error.message });
+    }
+
+    return res.status(500).json({ auth: false, message: messageResponse.INTERNAL_ERROR })
   }
 
 }
