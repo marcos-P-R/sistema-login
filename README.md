@@ -29,6 +29,7 @@
 
 ### Rodar cenarios de carga especificos
 
+- Smoke (disponibilidade minima): `npm run test:load:smoke`
 - Somente autenticacao: `npm run test:load:auth`
 - Fluxo com rota protegida: `npm run test:load:user-flow`
 - Carga constante: `npm run test:load:constant`
@@ -65,6 +66,7 @@
 - `npm run test:bdd`
 - `npm run test:security`
 - `npm run test:load`
+- `npm run test:load:smoke`
 - `npm run test:load:auth`
 - `npm run test:load:user-flow`
 - `npm run test:load:constant`
@@ -103,15 +105,14 @@ Thresholds minimos configurados nos cenarios autocannon:
 
 ### Mapeamento OWASP por suite de seguranca
 
-- `tests/security/auth.security.spec.ts`:
-  - A01 Broken Access Control
-  - A07 Identification and Authentication Failures
-- `tests/security/headers.security.spec.ts`:
-  - A05 Security Misconfiguration
-- `tests/security/input-validation.security.spec.ts`:
-  - A02 Cryptographic Failures (nao exposicao de segredos)
-  - A03 Injection (entrada maliciosa)
-  - A08 Software and Data Integrity Failures (dados inesperados)
+| Suite | Controle OWASP |
+|---|---|
+| `tests/security/auth.security.spec.ts` | A07 Identification and Authentication Failures |
+| `tests/security/authorization.security.spec.ts` | A01 Broken Access Control |
+| `tests/security/headers.security.spec.ts` | A05 Security Misconfiguration |
+| `tests/security/input-validation.security.spec.ts` | A02 Cryptographic Failures (nao exposicao de segredos) |
+| `tests/security/input-validation.security.spec.ts` | A03 Injection (entrada maliciosa) |
+| `tests/security/input-validation.security.spec.ts` | A08 Software and Data Integrity Failures (dados inesperados) |
 
 ### Convencoes e isolamento
 
