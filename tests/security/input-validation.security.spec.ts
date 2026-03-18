@@ -4,7 +4,7 @@ import { messageResponse } from '../../src/enum/messageResponse.js';
 import { getTestApp, resetDatabase } from '../shared/testEnvironment.js';
 import { makeUserPayload } from '../shared/testData.js';
 
-describe('Seguranca - validacao de entrada e exposicao de dados (OWASP A02, A03, A08)', () => {
+describe('Security - input validation and data exposure (OWASP A02, A03, A08)', () => {
   let app: Awaited<ReturnType<typeof getTestApp>>;
 
   beforeAll(async () => {
@@ -16,22 +16,22 @@ describe('Seguranca - validacao de entrada e exposicao de dados (OWASP A02, A03,
     await resetDatabase();
   });
 
-  it('rejeita payloads invalidos para cadastro e autenticacao', async () => {
+  it('rejects invalid payloads for registration and authentication', async () => {
     const invalidRegistration = await request(app)
       .post('/user')
-      .send({ name: 'A', email: 'email-invalido', password: '123' })
+      .send({ name: 'A', email: 'invalid-email', password: '123' })
       .expect(400);
 
     const invalidLogin = await request(app)
       .post('/login')
-      .send({ email: 'email-invalido', password: '' })
+      .send({ email: 'invalid-email', password: '' })
       .expect(400);
 
     expect(invalidRegistration.body).toEqual({ message: messageResponse.INVALID_REGISTRATION_DATA });
     expect(invalidLogin.body).toEqual({ auth: false, message: messageResponse.INVALID_AUTH_DATA });
   });
 
-  it('ignora campos inesperados sem alterar comportamento de autenticacao', async () => {
+  it('ignores unexpected fields without changing authentication behavior', async () => {
     const payload = makeUserPayload();
 
     const created = await request(app)
@@ -62,7 +62,7 @@ describe('Seguranca - validacao de entrada e exposicao de dados (OWASP A02, A03,
     expect(login.body.auth).toBe(true);
   });
 
-  it('nao expone senha, hash, salt nem detalhes internos nas respostas', async () => {
+  it('does not expose password, hash, salt, or internal details in responses', async () => {
     const payload = makeUserPayload();
 
     const created = await request(app)

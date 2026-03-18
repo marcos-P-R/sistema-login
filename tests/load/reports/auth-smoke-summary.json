@@ -5,10 +5,10 @@
   "startedAt": "2026-03-18T01:11:06.286Z",
   "finishedAt": "2026-03-18T01:11:29.447Z",
   "passed": true,
-  "interpretation": "Todos os thresholds foram respeitados para o perfil selecionado.",
+  "interpretation": "All thresholds were respected for the selected profile.",
   "steps": [
     {
-      "step": "Cadastro de usuario",
+      "step": "User registration",
       "url": "http://127.0.0.1:39877/user",
       "method": "POST",
       "metrics": {
@@ -29,7 +29,7 @@
       "failures": []
     },
     {
-      "step": "Login de usuario",
+      "step": "User login",
       "url": "http://127.0.0.1:39877/login",
       "method": "POST",
       "metrics": {

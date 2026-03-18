@@ -28,7 +28,7 @@ function runAutocannon(options: AutocannonOptions) {
 
 async function createAuthenticatedToken(baseUrl: string) {
   const email = uniqueEmail('flow');
-  const password = 'senha-segura-123';
+  const password = 'secure-password-123';
 
   const createResponse = await fetch(`${baseUrl}/user`, {
     method: 'POST',
@@ -41,7 +41,7 @@ async function createAuthenticatedToken(baseUrl: string) {
   });
 
   if (createResponse.status !== 201) {
-    throw new Error(`Falha ao preparar usuario para fluxo protegido. Status: ${createResponse.status}`);
+    throw new Error(`Failed to prepare user for protected flow. Status: ${createResponse.status}`);
   }
 
   const loginResponse = await fetch(`${baseUrl}/login`, {
@@ -51,12 +51,12 @@ async function createAuthenticatedToken(baseUrl: string) {
   });
 
   if (loginResponse.status !== 200) {
-    throw new Error(`Falha ao autenticar usuario para fluxo protegido. Status: ${loginResponse.status}`);
+    throw new Error(`Failed to authenticate user for protected flow. Status: ${loginResponse.status}`);
   }
 
   const payload = (await loginResponse.json()) as { token?: string };
   if (!payload.token || payload.token.length < 20) {
-    throw new Error('Login nao retornou token JWT valido para o cenario de carga em rota protegida.');
+    throw new Error('Login did not return a valid JWT token for the protected-route load scenario.');
   }
 
   return payload.token;
@@ -81,7 +81,7 @@ export async function runUserFlowLoadScenario(baseUrl: string, profile: LoadProf
   const steps = [
     buildStepResult(
       {
-        step: 'Acesso a rota protegida com JWT',
+        step: 'Access protected route with JWT',
         url: `${baseUrl}/ping`,
         method: 'GET',
         result: pingResult,

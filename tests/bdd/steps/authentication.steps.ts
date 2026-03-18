@@ -5,11 +5,11 @@ import { messageResponse } from '../../../src/enum/messageResponse.js';
 import { makeUserPayload } from '../../shared/testData.js';
 import { bddContext } from '../support/hooks.js';
 
-Given('que eu possuo dados validos para cadastro', async () => {
+Given('I have valid registration data', async () => {
   bddContext.payload = makeUserPayload();
 });
 
-Given('que existe um usuario cadastrado', async () => {
+Given('there is a registered user', async () => {
   const payload = makeUserPayload();
   bddContext.payload = payload;
   bddContext.response = await request(bddContext.app!)
@@ -17,33 +17,33 @@ Given('que existe um usuario cadastrado', async () => {
     .send(payload);
 });
 
-When('eu envio a requisicao de cadastro', async () => {
+When('I send a registration request', async () => {
   assert.ok(bddContext.payload);
   bddContext.response = await request(bddContext.app!)
     .post('/user')
     .send(bddContext.payload);
 });
 
-When('eu tento autenticar com senha invalida', async () => {
+When('I try to authenticate with an invalid password', async () => {
   bddContext.response = await request(bddContext.app!)
     .post('/login')
     .send({
       email: bddContext.payload?.email,
-      password: 'senha-incorreta',
+      password: 'wrong-password',
     });
 });
 
-When('eu acesso a rota protegida sem token', async () => {
+When('I access the protected route without a token', async () => {
   bddContext.response = await request(bddContext.app!)
     .get('/ping');
 });
 
-Then('o cadastro deve ser concluido com sucesso', () => {
+Then('registration should succeed', () => {
   assert.equal(bddContext.response?.status, 201);
   assert.equal(bddContext.response?.body.email, bddContext.payload?.email);
 });
 
-Then('a autenticacao deve falhar com credenciais invalidas', () => {
+Then('authentication should fail with invalid credentials', () => {
   assert.equal(bddContext.response?.status, 200);
   assert.deepEqual(bddContext.response?.body, {
     auth: false,
@@ -51,7 +51,7 @@ Then('a autenticacao deve falhar com credenciais invalidas', () => {
   });
 });
 
-Then('o acesso deve ser negado', () => {
+Then('access should be denied', () => {
   assert.equal(bddContext.response?.status, 401);
   assert.deepEqual(bddContext.response?.body, {
     auth: false,

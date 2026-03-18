@@ -5,10 +5,10 @@
   "startedAt": "2026-03-18T01:11:29.450Z",
   "finishedAt": "2026-03-18T01:11:49.488Z",
   "passed": true,
-  "interpretation": "Todos os thresholds foram respeitados para o perfil selecionado.",
+  "interpretation": "All thresholds were respected for the selected profile.",
   "steps": [
     {
-      "step": "Acesso a rota protegida com JWT",
+      "step": "Access protected route with JWT",
       "url": "http://127.0.0.1:39877/ping",
       "method": "GET",
       "metrics": {

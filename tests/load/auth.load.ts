@@ -48,7 +48,7 @@ async function createLoginCredential(baseUrl: string, index: number, password: s
   });
 
   if (response.status !== 201) {
-    throw new Error(`Falha ao preparar usuario para carga de login. Status: ${response.status}`);
+    throw new Error(`Failed to prepare user for login load test. Status: ${response.status}`);
   }
 
   return { email, password };
@@ -68,7 +68,7 @@ export async function runAuthLoadScenario(baseUrl: string, profile: LoadProfile)
   const startedAt = new Date().toISOString();
   const shape = getLoadShape(profile);
   const thresholds = getThresholds(profile);
-  const defaultPassword = 'senha-segura-123';
+  const defaultPassword = 'secure-password-123';
 
   const registerRequests: AutocannonRequest[] = Array.from({ length: shape.amount }, (_, index) => {
     const body = JSON.stringify({
@@ -120,7 +120,7 @@ export async function runAuthLoadScenario(baseUrl: string, profile: LoadProfile)
   const steps = [
     buildStepResult(
       {
-        step: 'Cadastro de usuario',
+        step: 'User registration',
         url: `${baseUrl}/user`,
         method: 'POST',
         result: registerResult,
@@ -129,7 +129,7 @@ export async function runAuthLoadScenario(baseUrl: string, profile: LoadProfile)
     ),
     buildStepResult(
       {
-        step: 'Login de usuario',
+        step: 'User login',
         url: `${baseUrl}/login`,
         method: 'POST',
         result: loginResult,

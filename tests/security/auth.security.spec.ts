@@ -5,7 +5,7 @@ import { messageResponse } from '../../src/enum/messageResponse.js';
 import { getTestApp, resetDatabase } from '../shared/testEnvironment.js';
 import { makeUserPayload } from '../shared/testData.js';
 
-describe('Seguranca - autenticacao e autorizacao (OWASP A01, A07)', () => {
+describe('Security - authentication and authorization (OWASP A01, A07)', () => {
   let app: Awaited<ReturnType<typeof getTestApp>>;
 
   beforeAll(async () => {
@@ -17,26 +17,26 @@ describe('Seguranca - autenticacao e autorizacao (OWASP A01, A07)', () => {
     await resetDatabase();
   });
 
-  it('rejeita credenciais invalidas sem detalhar qual campo falhou', async () => {
+  it('rejects invalid credentials without revealing which field failed', async () => {
     const payload = makeUserPayload();
 
     await request(app).post('/user').send(payload).expect(201);
 
     const wrongPassword = await request(app)
       .post('/login')
-      .send({ email: payload.email, password: 'senha-errada' })
+      .send({ email: payload.email, password: 'wrong-password' })
       .expect(200);
 
     const unknownEmail = await request(app)
       .post('/login')
-      .send({ email: `nao-existe-${Date.now()}@example.com`, password: payload.password })
+      .send({ email: `not-found-${Date.now()}@example.com`, password: payload.password })
       .expect(200);
 
     expect(wrongPassword.body).toEqual({ auth: false, message: messageResponse.INVALID_CREDENTIALS });
     expect(unknownEmail.body).toEqual({ auth: false, message: messageResponse.INVALID_CREDENTIALS });
   });
 
-  it('bloqueia rota protegida quando token esta ausente', async () => {
+  it('blocks protected route when token is missing', async () => {
     const response = await request(app)
       .get('/ping')
       .expect(401);
@@ -44,7 +44,7 @@ describe('Seguranca - autenticacao e autorizacao (OWASP A01, A07)', () => {
     expect(response.body).toEqual({ auth: false, message: 'No token provided.' });
   });
 
-  it('bloqueia rota protegida quando token esta expirado, malformado ou adulterado', async () => {
+  it('blocks protected route when token is expired, malformed, or tampered', async () => {
     const payload = makeUserPayload();
     await request(app).post('/user').send(payload).expect(201);
 
@@ -59,7 +59,7 @@ describe('Seguranca - autenticacao e autorizacao (OWASP A01, A07)', () => {
       { expiresIn: -10 },
     );
 
-    const malformedToken = 'token.invalido';
+    const malformedToken = 'token.invalid';
     const tamperedToken = `${String(loginResponse.body.token).slice(0, -1)}x`;
 
     const [expiredResponse, malformedResponse, tamperedResponse] = await Promise.all([

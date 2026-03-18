@@ -4,7 +4,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { createRateLimiter } from '../../src/middleware/rateLimiter.js';
 import { getTestApp } from '../shared/testEnvironment.js';
 
-describe('Seguranca - headers e configuracao HTTP (OWASP A05)', () => {
+describe('Security - headers and HTTP configuration (OWASP A05)', () => {
   let app: Awaited<ReturnType<typeof getTestApp>>;
 
   beforeAll(async () => {
@@ -12,10 +12,10 @@ describe('Seguranca - headers e configuracao HTTP (OWASP A05)', () => {
     app = await getTestApp();
   });
 
-  it('aplica headers de protecao via helmet e remove x-powered-by', async () => {
+  it('applies protection headers via helmet and removes x-powered-by', async () => {
     const response = await request(app)
       .post('/login')
-      .send({ email: 'email-invalido', password: '123' })
+      .send({ email: 'invalid-email', password: '123' })
       .expect(400);
 
     expect(response.headers['x-content-type-options']).toBe('nosniff');
@@ -24,7 +24,7 @@ describe('Seguranca - headers e configuracao HTTP (OWASP A05)', () => {
     expect(response.headers['x-powered-by']).toBeUndefined();
   });
 
-  it('mantem comportamento de CORS ativo', async () => {
+  it('keeps CORS behavior enabled', async () => {
     const response = await request(app)
       .get('/ping')
       .set('Origin', 'http://example.com')
@@ -33,7 +33,7 @@ describe('Seguranca - headers e configuracao HTTP (OWASP A05)', () => {
     expect(response.headers['access-control-allow-origin']).toBe('*');
   });
 
-  it('limita tentativas repetidas de login e mantem o servico respondendo', async () => {
+  it('limits repeated login attempts and keeps service responsive', async () => {
     const localApp = Express();
     localApp.use(Express.json());
 
@@ -44,7 +44,7 @@ describe('Seguranca - headers e configuracao HTTP (OWASP A05)', () => {
     });
 
     localApp.post('/login', limiter, (_req, res) => {
-      res.status(401).json({ auth: false, message: 'Credenciais invalidas' });
+      res.status(401).json({ auth: false, message: 'Invalid credentials' });
     });
 
     localApp.get('/health', (_req, res) => {

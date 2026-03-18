@@ -19,9 +19,9 @@ let integrationContext: IntegrationContext | null = null;
 
 function buildRuntimeUnavailableMessage() {
   return [
-    'Testcontainers não conseguiu iniciar o banco de testes.',
-    'Verifique se existe um runtime de containers compatível disponível no ambiente, como Docker Engine, Colima, Rancher Desktop ou Podman com suporte ao Testcontainers.',
-    'O projeto não precisa de Dockerfile nem docker-compose.yml para subir os containers efêmeros usados apenas nos testes.',
+    'Testcontainers could not start the test database.',
+    'Check whether a compatible container runtime is available in the environment, such as Docker Engine, Colima, Rancher Desktop, or Podman with Testcontainers support.',
+    'The project does not require a Dockerfile or docker-compose.yml to start ephemeral containers used only during tests.',
   ].join(' ');
 }
 
@@ -47,7 +47,7 @@ async function runPrismaMigrations(databaseUrl: string) {
     }
   }
 
-  throw lastError ?? new Error('Falha ao aplicar migrations no banco de testes.');
+  throw lastError ?? new Error('Failed to apply migrations in the test database.');
 }
 
 export async function startTestEnvironment() {

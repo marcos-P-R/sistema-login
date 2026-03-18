@@ -12,7 +12,7 @@ function createRepositoryMock(): UserPort {
 }
 
 describe('UserService', () => {
-  it('cadastra usuário com hash e salt quando os dados são válidos', async () => {
+  it('registers user with hash and salt when payload is valid', async () => {
     const repository = createRepositoryMock();
     vi.mocked(repository.getUserByEmail).mockResolvedValue(null);
     vi.mocked(repository.create).mockImplementation(async (user) => ({
@@ -25,7 +25,7 @@ describe('UserService', () => {
     const result = await service.registerUser({
       name: 'Maria',
       email: 'Maria@Example.com',
-      senha: 'senha-forte',
+      senha: 'strong-password',
     });
 
     expect(result).toEqual({ id: 1, name: 'Maria', email: 'maria@example.com' });
@@ -39,13 +39,13 @@ describe('UserService', () => {
     );
   });
 
-  it('rejeita cadastro com dados inválidos', async () => {
+  it('rejects registration with invalid payload', async () => {
     const service = new UserService(createRepositoryMock());
 
     await expect(
       service.registerUser({
         name: 'A',
-        email: 'email-invalido',
+        email: 'invalid-email',
         senha: '123',
       }),
     ).rejects.toMatchObject({
@@ -54,7 +54,7 @@ describe('UserService', () => {
     });
   });
 
-  it('rejeita cadastro com email já existente', async () => {
+  it('rejects registration when email already exists', async () => {
     const repository = createRepositoryMock();
     vi.mocked(repository.getUserByEmail).mockResolvedValue({
       name: 'Maria',
@@ -69,7 +69,7 @@ describe('UserService', () => {
       service.registerUser({
         name: 'Maria',
         email: 'maria@example.com',
-        senha: 'senha-forte',
+        senha: 'strong-password',
       }),
     ).rejects.toMatchObject({
       statusCode: 409,
@@ -77,8 +77,8 @@ describe('UserService', () => {
     });
   });
 
-  it('retorna token quando login usa hash persistido pelo serviço', async () => {
-    process.env.JWT_SECRET = 'segredo-unitario';
+  it('returns token when login uses hash persisted by service', async () => {
+    process.env.JWT_SECRET = 'unit-secret';
 
     const registerRepository = createRepositoryMock();
     vi.mocked(registerRepository.getUserByEmail).mockResolvedValue(null);
@@ -92,7 +92,7 @@ describe('UserService', () => {
     await registerService.registerUser({
       name: 'Joao',
       email: 'joao@example.com',
-      senha: 'senha-segura',
+      senha: 'secure-password',
     });
 
     const persistedUser = vi.mocked(registerRepository.create).mock.calls[0][0];
@@ -107,7 +107,7 @@ describe('UserService', () => {
     const loginService = new UserService(loginRepository);
     const result = await loginService.loginUser({
       email: 'joao@example.com',
-      senha: 'senha-segura',
+      senha: 'secure-password',
     });
 
     expect(result.auth).toBe(true);
@@ -119,30 +119,30 @@ describe('UserService', () => {
     });
   });
 
-  it('retorna erro esperado quando a senha está incorreta', async () => {
+  it('returns expected error when password is incorrect', async () => {
     const repository = createRepositoryMock();
     vi.mocked(repository.getUserByEmail).mockResolvedValue({
       name: 'Maria',
       email: 'maria@example.com',
-      senha: 'hash-invalido',
+      senha: 'invalid-hash',
       salt: 'salt',
     });
 
     const service = new UserService(repository);
     const result = await service.loginUser({
       email: 'maria@example.com',
-      senha: 'senha-errada',
+      senha: 'wrong-password',
     });
 
     expect(result).toEqual({ auth: false, message: messageResponse.INVALID_CREDENTIALS });
   });
 
-  it('rejeita login com payload ausente ou inválido', async () => {
+  it('rejects login with missing or invalid payload', async () => {
     const service = new UserService(createRepositoryMock());
 
     await expect(
       service.loginUser({
-        email: 'email-invalido',
+        email: 'invalid-email',
         senha: '',
       }),
     ).rejects.toMatchObject({

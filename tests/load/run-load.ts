@@ -16,7 +16,7 @@ type LoadScenario = 'auth' | 'user-flow' | 'all';
 function resolveScenario(arg?: string): LoadScenario {
   const scenario = (arg ?? 'all') as LoadScenario;
   if (!allowedScenarios.has(scenario)) {
-    throw new Error(`Cenario invalido: ${arg}. Use auth, user-flow ou all.`);
+    throw new Error(`Invalid scenario: ${arg}. Use auth, user-flow, or all.`);
   }
   return scenario;
 }
@@ -28,7 +28,7 @@ async function startServer() {
     const server = app.listen(0, '127.0.0.1', () => {
       const address = server.address();
       if (!address || typeof address === 'string') {
-        reject(new Error('Nao foi possivel obter a porta do servidor de carga.'));
+        reject(new Error('Could not retrieve the load server port.'));
         return;
       }
 
@@ -59,17 +59,17 @@ async function writeScenarioReport(summary: ScenarioSummary) {
 }
 
 function printScenarioSummary(summary: ScenarioSummary, reportPath: string) {
-  const status = summary.passed ? 'PASSOU' : 'FALHOU';
+  const status = summary.passed ? 'PASSED' : 'FAILED';
   console.log(`\n[load:${summary.scenario}] ${status} (${summary.profile})`);
-  console.log(`[load:${summary.scenario}] relatorio: ${reportPath}`);
+  console.log(`[load:${summary.scenario}] report: ${reportPath}`);
 
   for (const step of summary.steps) {
     console.log(
-      `[load:${summary.scenario}] ${step.step} | avg=${step.metrics.avgLatencyMs.toFixed(2)}ms | p95=${step.metrics.p95LatencyMs.toFixed(2)}ms | erro=${(step.metrics.errorRate * 100).toFixed(2)}% | throughput=${step.metrics.throughputRps.toFixed(2)} req/s`,
+      `[load:${summary.scenario}] ${step.step} | avg=${step.metrics.avgLatencyMs.toFixed(2)}ms | p95=${step.metrics.p95LatencyMs.toFixed(2)}ms | error=${(step.metrics.errorRate * 100).toFixed(2)}% | throughput=${step.metrics.throughputRps.toFixed(2)} req/s`,
     );
   }
 
-  console.log(`[load:${summary.scenario}] interpretacao: ${summary.interpretation}`);
+  console.log(`[load:${summary.scenario}] interpretation: ${summary.interpretation}`);
 }
 
 function collectFailures(summaries: ScenarioSummary[]) {
@@ -106,7 +106,7 @@ async function main() {
 
     const failures = collectFailures(summaries);
     if (failures.length > 0) {
-      throw new Error(`Thresholds violados em ${failures.length} etapa(s): ${failures.join(' | ')}`);
+      throw new Error(`Thresholds violated in ${failures.length} step(s): ${failures.join(' | ')}`);
     }
   } finally {
     await close();

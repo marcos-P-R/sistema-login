@@ -4,7 +4,7 @@ import { messageResponse } from '../../src/enum/messageResponse.js';
 import { getTestApp, resetDatabase } from '../shared/testEnvironment.js';
 import { makeUserPayload } from '../shared/testData.js';
 
-describe('Rotas principais', () => {
+describe('Core routes', () => {
   let app: Awaited<ReturnType<typeof getTestApp>>;
 
   beforeAll(async () => {
@@ -15,7 +15,7 @@ describe('Rotas principais', () => {
     await resetDatabase();
   });
 
-  it('cria usuário com persistência real no banco de testes', async () => {
+  it('creates user with real persistence in test database', async () => {
     const payload = makeUserPayload();
 
     const response = await request(app)
@@ -30,7 +30,7 @@ describe('Rotas principais', () => {
     });
   });
 
-  it('realiza login com credenciais válidas', async () => {
+  it('logs in with valid credentials', async () => {
     const payload = makeUserPayload();
 
     await request(app).post('/user').send(payload).expect(201);
@@ -47,7 +47,7 @@ describe('Rotas principais', () => {
     });
   });
 
-  it('permite acessar rota protegida com JWT válido', async () => {
+  it('allows access to protected route with valid JWT', async () => {
     const payload = makeUserPayload();
 
     await request(app).post('/user').send(payload).expect(201);
@@ -64,7 +64,7 @@ describe('Rotas principais', () => {
     expect(response.body).toEqual({ msg: 'pong' });
   });
 
-  it('bloqueia acesso à rota protegida sem JWT', async () => {
+  it('blocks access to protected route without JWT', async () => {
     const response = await request(app)
       .get('/ping')
       .expect(401);

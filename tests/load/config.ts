@@ -161,25 +161,25 @@ export function buildStepResult(
 
   if (metrics.avgLatencyMs > thresholds.maxAvgLatencyMs) {
     failures.push(
-      `latencia media ${metrics.avgLatencyMs.toFixed(2)}ms acima de ${thresholds.maxAvgLatencyMs}ms`,
+      `average latency ${metrics.avgLatencyMs.toFixed(2)}ms above ${thresholds.maxAvgLatencyMs}ms`,
     );
   }
 
   if (metrics.p95LatencyMs > thresholds.maxP95LatencyMs) {
     failures.push(
-      `latencia p95 ${metrics.p95LatencyMs.toFixed(2)}ms acima de ${thresholds.maxP95LatencyMs}ms`,
+      `p95 latency ${metrics.p95LatencyMs.toFixed(2)}ms above ${thresholds.maxP95LatencyMs}ms`,
     );
   }
 
   if (metrics.errorRate > thresholds.maxErrorRate) {
     failures.push(
-      `taxa de erro ${(metrics.errorRate * 100).toFixed(2)}% acima de ${(thresholds.maxErrorRate * 100).toFixed(2)}%`,
+      `error rate ${(metrics.errorRate * 100).toFixed(2)}% above ${(thresholds.maxErrorRate * 100).toFixed(2)}%`,
     );
   }
 
   if (metrics.throughputRps < thresholds.minThroughputRps) {
     failures.push(
-      `throughput ${metrics.throughputRps.toFixed(2)} req/s abaixo de ${thresholds.minThroughputRps} req/s`,
+      `throughput ${metrics.throughputRps.toFixed(2)} req/s below ${thresholds.minThroughputRps} req/s`,
     );
   }
 
@@ -197,14 +197,14 @@ export function buildStepResult(
 export function buildInterpretation(steps: ScenarioStepResult[]) {
   const failedSteps = steps.filter((step) => !step.passed);
   if (failedSteps.length === 0) {
-    return 'Todos os thresholds foram respeitados para o perfil selecionado.';
+    return 'All thresholds were respected for the selected profile.';
   }
 
   const reasons = failedSteps
     .map((step) => `${step.step}: ${step.failures.join('; ')}`)
     .join(' | ');
 
-  return `Foram detectadas degradacoes acima dos thresholds. Detalhes: ${reasons}`;
+  return `Degradations above thresholds were detected. Details: ${reasons}`;
 }
 
 export function uniqueEmail(prefix = 'load-user') {

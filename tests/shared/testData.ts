@@ -2,9 +2,9 @@ import { randomUUID } from 'node:crypto';
 
 export function makeUserPayload(overrides: Partial<{ name: string; email: string; password: string }> = {}) {
   return {
-    name: 'Usuario Teste',
+    name: 'Test User',
     email: `user-${randomUUID()}@example.com`,
-    password: 'senha-segura-123',
+    password: 'secure-password-123',
     ...overrides,
   };
 }

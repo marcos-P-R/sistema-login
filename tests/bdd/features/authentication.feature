@@ -1,18 +1,18 @@
-Feature: Autenticacao e acesso protegido
-  Como consumidor da API
-  Quero validar os principais fluxos de autenticacao
-  Para garantir que o comportamento da aplicacao permaneca estavel
+Feature: Authentication and protected access
+  As an API consumer
+  I want to validate the main authentication flows
+  So that application behavior remains stable
 
-  Scenario: Cadastro com sucesso
-    Given que eu possuo dados validos para cadastro
-    When eu envio a requisicao de cadastro
-    Then o cadastro deve ser concluido com sucesso
+  Scenario: Successful registration
+    Given I have valid registration data
+    When I send a registration request
+    Then registration should succeed
 
-  Scenario: Login com credenciais invalidas
-    Given que existe um usuario cadastrado
-    When eu tento autenticar com senha invalida
-    Then a autenticacao deve falhar com credenciais invalidas
+  Scenario: Login with invalid credentials
+    Given there is a registered user
+    When I try to authenticate with an invalid password
+    Then authentication should fail with invalid credentials
 
-  Scenario: Acesso negado sem token
-    When eu acesso a rota protegida sem token
-    Then o acesso deve ser negado
+  Scenario: Access denied without token
+    When I access the protected route without a token
+    Then access should be denied
