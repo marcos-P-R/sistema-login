@@ -1,0 +1,53 @@
+{
+  "scenario": "auth",
+  "profile": "smoke",
+  "runId": "1773796248594",
+  "startedAt": "2026-03-18T01:11:06.286Z",
+  "finishedAt": "2026-03-18T01:11:29.447Z",
+  "passed": true,
+  "interpretation": "All thresholds were respected for the selected profile.",
+  "steps": [
+    {
+      "step": "User registration",
+      "url": "http://127.0.0.1:39877/user",
+      "method": "POST",
+      "metrics": {
+        "avgLatencyMs": 8.15,
+        "p95LatencyMs": 12,
+        "errorRate": 0,
+        "throughputRps": 60,
+        "totalRequests": 120,
+        "failedRequests": 0
+      },
+      "thresholds": {
+        "maxAvgLatencyMs": 400,
+        "maxP95LatencyMs": 800,
+        "maxErrorRate": 0.01,
+        "minThroughputRps": 5
+      },
+      "passed": true,
+      "failures": []
+    },
+    {
+      "step": "User login",
+      "url": "http://127.0.0.1:39877/login",
+      "method": "POST",
+      "metrics": {
+        "avgLatencyMs": 1.57,
+        "p95LatencyMs": 2,
+        "errorRate": 0,
+        "throughputRps": 951.95,
+        "totalRequests": 19039,
+        "failedRequests": 0
+      },
+      "thresholds": {
+        "maxAvgLatencyMs": 400,
+        "maxP95LatencyMs": 800,
+        "maxErrorRate": 0.01,
+        "minThroughputRps": 5
+      },
+      "passed": true,
+      "failures": []
+    }
+  ]
+}

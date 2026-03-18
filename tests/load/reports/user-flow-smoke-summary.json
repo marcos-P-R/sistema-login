@@ -1,0 +1,32 @@
+{
+  "scenario": "user-flow",
+  "profile": "smoke",
+  "runId": "1773796248594",
+  "startedAt": "2026-03-18T01:11:29.450Z",
+  "finishedAt": "2026-03-18T01:11:49.488Z",
+  "passed": true,
+  "interpretation": "All thresholds were respected for the selected profile.",
+  "steps": [
+    {
+      "step": "Access protected route with JWT",
+      "url": "http://127.0.0.1:39877/ping",
+      "method": "GET",
+      "metrics": {
+        "avgLatencyMs": 0.02,
+        "p95LatencyMs": 1,
+        "errorRate": 0,
+        "throughputRps": 3574.3,
+        "totalRequests": 71474,
+        "failedRequests": 0
+      },
+      "thresholds": {
+        "maxAvgLatencyMs": 400,
+        "maxP95LatencyMs": 800,
+        "maxErrorRate": 0.01,
+        "minThroughputRps": 5
+      },
+      "passed": true,
+      "failures": []
+    }
+  ]
+}
