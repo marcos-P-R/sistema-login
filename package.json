@@ -16,6 +16,7 @@
     "test:bdd": "NODE_ENV=test node --import=tsx ./node_modules/@cucumber/cucumber/bin/cucumber-js tests/bdd/features --import tests/bdd/support/hooks.ts --import tests/bdd/steps/**/*.steps.ts --format progress-bar",
     "test:security": "vitest run --config vitest.security.config.ts",
     "test:load": "node --import=tsx tests/load/run-load.ts all",
+    "test:load:smoke": "LOAD_PROFILE=smoke node --import=tsx tests/load/run-load.ts all",
     "test:load:auth": "node --import=tsx tests/load/run-load.ts auth",
     "test:load:user-flow": "node --import=tsx tests/load/run-load.ts user-flow",
     "test:load:constant": "LOAD_PROFILE=constant node --import=tsx tests/load/run-load.ts all",
